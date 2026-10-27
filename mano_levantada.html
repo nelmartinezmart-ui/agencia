@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mano levantada · agenc[ia]</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#0d1f4c;--mute:#5a6585;--line:#d9ddea;--acc:#e9a23b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 50px}
+h1{margin:0;font-size:1.6rem}h1 b{color:var(--acc)}
+.sub{color:var(--mute);margin:4px 0 14px}
+.bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.cnt{background:var(--ink);color:#fff;border-radius:10px;padding:10px 16px;font-weight:800;font-size:1.1rem}
+.cnt.full{background:#2e7d32}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer}
+.btn.p{background:var(--acc);border-color:var(--acc)}
+label.k{font-size:.8rem;font-weight:700;color:var(--mute)}
+select{border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;background:var(--card);color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.t{position:relative;background:var(--card);border:2px solid var(--line);border-radius:14px;min-height:96px;padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:.15s}
+.t:hover{border-color:var(--acc);transform:translateY(-2px)}
+.t .ic{font-size:1.6rem}
+.t input{width:100%;text-align:center;border:0;background:transparent;color:var(--ink);font:inherit;font-weight:700}
+.t.sel{background:var(--ink);color:#fff;border-color:var(--ink);cursor:default;transform:none}
+.t.sel input{color:#fff}
+.t .n{position:absolute;top:-10px;left:-10px;background:var(--acc);color:var(--ink);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800}
+.t.off{opacity:.4;cursor:not-allowed;transform:none}
+.t.off:hover{border-color:var(--line)}
+.lst{margin-top:20px;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--acc);border-radius:12px;padding:14px 18px}
+.lst h2{margin:0 0 8px;font-size:1rem}
+.lst ol{margin:0;padding-left:22px;font-weight:700}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>AGENC<b>[</b>IA<b>]</b> · ¡Mano levantada!</h1>
+<p class="sub">Cuando un equipo levante la mano, toca su tarjeta. Los primeros en ser tocados quedan seleccionados, en orden. Al llenarse los cupos, el resto se bloquea.</p>
+<div class="bar">
+ <div class="cnt" id="cnt"></div>
+ <label class="k">Cupos <select id="cupos"></select></label>
+ <button class="btn" id="undo">↩ Deshacer último</button>
+ <button class="btn p" id="reset">Reiniciar</button>
+</div>
+<div class="grid" id="grid"></div>
+<div class="lst"><h2>Equipos seleccionados</h2><ol id="lst"></ol></div>
+</div>
+<script>
+var N=16,cupos=5,orden=[],names=[];
+for(var i=0;i<N;i++)names.push("Equipo "+(i+1));
+var cs=document.getElementById("cupos");
+for(i=1;i<=N;i++){var o=document.createElement("option");o.value=i;o.textContent=i;if(i===5)o.selected=true;cs.appendChild(o)}
+cs.onchange=function(){cupos=+cs.value;while(orden.length>cupos)orden.pop();draw()};
+function draw(){
+ var g=document.getElementById("grid");g.innerHTML="";
+ names.forEach(function(nm,i){
+  var pos=orden.indexOf(i),full=orden.length>=cupos;
+  var d=document.createElement("div");
+  d.className="t"+(pos>=0?" sel":"")+(pos<0&&full?" off":"");
+  d.innerHTML=(pos>=0?'<div class="n">'+(pos+1)+'</div>':"")+'<div class="ic">'+(pos>=0?"✋":"🙋")+'</div><input value="'+nm.replace(/"/g,"&quot;")+'" aria-label="Nombre del equipo">'+(pos<0&&full?'<small>Cupo lleno</small>':"");
+  var inp=d.querySelector("input");
+  inp.onclick=function(e){e.stopPropagation()};
+  inp.oninput=function(){names[i]=inp.value;lista()};
+  d.onclick=function(){if(orden.indexOf(i)<0&&orden.length<cupos){orden.push(i);draw()}};
+  g.appendChild(d);
+ });
+ lista();
+}
+function lista(){
+ var c=document.getElementById("cnt");c.textContent="Cupos: "+orden.length+" / "+cupos;c.className="cnt"+(orden.length>=cupos?" full":"");
+ document.getElementById("lst").innerHTML=orden.length?orden.map(function(i){return "<li>"+names[i].replace(/</g,"&lt;")+"</li>"}).join(""):"<li style='font-weight:400;color:#5a6585;list-style:none;margin-left:-22px'>Aún no hay equipos seleccionados.</li>";
+}
+document.getElementById("undo").onclick=function(){orden.pop();draw()};
+document.getElementById("reset").onclick=function(){orden=[];draw()};
+draw();
+</script>
+</body>
+</html>
