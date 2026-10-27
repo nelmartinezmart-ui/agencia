@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mano levantada · agenc[ia]</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#0d1f4c;--mute:#5a6585;--line:#d9ddea;--acc:#e9a23b;--ok:#2e7d32;--bad:#b3261e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:18px 16px 50px}
+h1{margin:0;font-size:1.5rem}h1 b{color:var(--acc)}
+.sub{color:var(--mute);margin:4px 0 14px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.cnt{background:var(--ink);color:#fff;border-radius:10px;padding:10px 16px;font-weight:800}
+.cnt.full{background:var(--ok)}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer}
+.btn.p{background:var(--acc);border-color:var(--acc)}
+select{border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;background:var(--card);color:var(--ink)}
+.st{font-size:.8rem;color:var(--mute)}
+.st i{display:inline-block;width:9px;height:9px;border-radius:50%;background:#bbb;margin-right:5px}
+.st.on i{background:var(--ok)}
+.join{display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--acc);border-radius:12px;padding:14px 18px;margin-bottom:16px}
+.join .lk{word-break:break-all;font-weight:700}
+.join .cd{font-size:2rem;font-weight:800;letter-spacing:4px;color:var(--acc)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.t{position:relative;background:var(--card);border:2px solid var(--line);border-radius:14px;min-height:92px;padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer}
+.t .ic{font-size:1.5rem}
+.t input{width:100%;text-align:center;border:0;background:transparent;color:var(--ink);font:inherit;font-weight:700}
+.t.sel{background:var(--ink);color:#fff;border-color:var(--ink);cursor:default}
+.t.sel input{color:#fff}
+.t .n{display:none;position:absolute;top:-10px;left:-10px;background:var(--acc);color:var(--ink);width:34px;height:34px;border-radius:50%;place-items:center;font-weight:800}
+.t.sel .n{display:grid}
+.t.off{opacity:.4;cursor:not-allowed}
+.t.mine{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc)}
+.lst{margin-top:18px;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--acc);border-radius:12px;padding:14px 18px}
+.lst h2{margin:0 0 8px;font-size:1rem}
+.lst ol{margin:0;padding-left:22px;font-weight:700}
+.big{display:block;width:100%;margin:16px 0;padding:34px 10px;font-size:1.8rem;font-weight:800;border:0;border-radius:18px;background:var(--acc);color:var(--ink);cursor:pointer}
+.big:disabled{opacity:.45;cursor:not-allowed}
+.res{padding:18px;border-radius:14px;font-weight:800;font-size:1.25rem;text-align:center;margin-top:6px;display:none}
+.res.ok{display:block;background:var(--ok);color:#fff}
+.res.no{display:block;background:var(--bad);color:#fff}
+.res.wait{display:block;background:var(--card);border:1px solid var(--line);color:var(--ink)}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+(function(){
+var N=16,DEF=[];for(var i=0;i<N;i++)DEF.push("Equipo "+(i+1));
+var P=new URLSearchParams(location.search),sala=P.get("sala"),host=!sala;
+function code(){var a="abcdefghjkmnpqrstuvwxyz23456789",s="";for(var i=0;i<6;i++)s+=a[Math.floor(Math.random()*a.length)];return s}
+if(host){try{sala=localStorage.getItem("agc_sala")}catch(e){}if(!sala){sala=code();try{localStorage.setItem("agc_sala",sala)}catch(e){}}}
+sala=String(sala).toLowerCase().replace(/[^a-z0-9]/g,"");
+var topic="agencia-mano-"+sala,URL="https://ntfy.sh/"+topic;
+var S={orden:[],cupos:5,names:DEF.slice()},mine=null;
+try{var m0=sessionStorage.getItem("agc_eq");if(m0!==null)mine=+m0}catch(e){}
+var app=document.getElementById("app"),cards=[],connected=false;
+function pub(o){return fetch(URL,{method:"POST",body:JSON.stringify(o)})}
+function apply(o){
+ if(o.type==="reset"){S.orden=[]}
+ else if(o.type==="cfg"){S.cupos=o.cupos;S.names=o.names}
+ else if(o.type==="hand"){if(S.orden.indexOf(o.t)<0&&S.orden.length<S.cupos)S.orden.push(o.t)}
+}
+function connect(){
+ var es=new EventSource(URL+"/sse?since=all");
+ es.onopen=function(){S.orden=[];S.cupos=5;S.names=DEF.slice();connected=true;render()};
+ es.onerror=function(){connected=false;render()};
+ es.onmessage=function(e){try{var m=JSON.parse(e.data);if(m.event&&m.event!=="message")return;apply(JSON.parse(m.message));render()}catch(x){}};
+}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function build(){
+ var h='<h1>AGENC<b>[</b>IA<b>]</b> · ¡Mano levantada!</h1>';
+ if(host){
+  var link=location.origin+location.pathname+"?sala="+sala;
+  h+='<p class="sub">Los equipos escanean el código QR, eligen su equipo y tocan el botón. El servidor registra el orden de llegada: los primeros quedan seleccionados.</p>'+
+  '<div class="join"><div id="qr"></div><div><div class="st">Código de sala</div><div class="cd">'+sala.toUpperCase()+'</div><div class="st" style="margin-top:6px">Enlace para los celulares</div><div class="lk">'+esc(link)+'</div></div></div>'+
+  '<div class="bar"><div class="cnt" id="cnt"></div><label class="st">Cupos <select id="cupos"></select></label><button class="btn p" id="reset">Reiniciar ronda</button><button class="btn" id="nueva">Nueva sala</button><span class="st" id="st"><i></i><b>Conectando…</b></span></div>';
+ }else{
+  h+='<p class="sub">1) Elige tu equipo. 2) Cuando tu equipo esté listo, toca el botón grande.</p><div class="st" id="st" style="margin-bottom:10px"><i></i><b>Conectando…</b></div>';
+ }
+ h+='<div class="grid" id="grid"></div>';
+ if(!host)h+='<button class="big" id="hand" disabled>✋ ¡Levantamos la mano!</button><div class="res" id="res"></div>';
+ h+='<div class="lst"><h2>Equipos seleccionados</h2><ol id="lst"></ol></div>';
+ app.innerHTML=h;
+ var g=document.getElementById("grid");
+ for(var i=0;i<N;i++){(function(i){
+  var d=document.createElement("div");d.className="t";
+  d.innerHTML='<div class="n"></div><div class="ic">🙋</div>'+(host?'<input aria-label="Nombre del equipo">':'<b class="nm"></b>');
+  var inp=d.querySelector("input");
+  if(inp){inp.onclick=function(e){e.stopPropagation()};
+   inp.oninput=function(){S.names[i]=inp.value;clearTimeout(window._tn);window._tn=setTimeout(function(){pub({type:"cfg",cupos:S.cupos,names:S.names})},700)}}
+  d.onclick=function(){
+   if(host){if(S.orden.indexOf(i)<0&&S.orden.length<S.cupos)pub({type:"hand",t:i})}
+   else{mine=i;try{sessionStorage.setItem("agc_eq",i)}catch(e){}render()}
+  };
+  g.appendChild(d);cards.push({d:d,inp:inp});
+ })(i)}
+ if(host){
+  var cs=document.getElementById("cupos");
+  for(var k=1;k<=N;k++){var o=document.createElement("option");o.value=k;o.textContent=k;if(k===5)o.selected=true;cs.appendChild(o)}
+  cs.onchange=function(){S.cupos=+cs.value;pub({type:"cfg",cupos:S.cupos,names:S.names})};
+  document.getElementById("reset").onclick=function(){pub({type:"reset"})};
+  document.getElementById("nueva").onclick=function(){try{localStorage.removeItem("agc_sala")}catch(e){}location.reload()};
+  try{new QRCode(document.getElementById("qr"),{text:link,width:150,height:150})}catch(e){document.getElementById("qr").textContent=""}
+ }else{
+  document.getElementById("hand").onclick=function(){if(mine!==null){this.disabled=true;pub({type:"hand",t:mine}).catch(function(){render()})}}
+ }
+}
+function render(){
+ var full=S.orden.length>=S.cupos;
+ cards.forEach(function(c,i){
+  var pos=S.orden.indexOf(i);
+  c.d.className="t"+(pos>=0?" sel":"")+(pos<0&&full?" off":"")+(!host&&mine===i?" mine":"");
+  c.d.querySelector(".n").textContent=pos+1;
+  c.d.querySelector(".ic").textContent=pos>=0?"✋":"🙋";
+  if(c.inp){if(document.activeElement!==c.inp)c.inp.value=S.names[i]}else c.d.querySelector(".nm").textContent=S.names[i];
+ });
+ var st=document.getElementById("st");if(st){st.className="st"+(connected?" on":"");st.querySelector("b").textContent=connected?"Conectado":"Sin conexión (reintentando…)"}
+ var cn=document.getElementById("cnt");if(cn){cn.textContent="Cupos: "+S.orden.length+" / "+S.cupos;cn.className="cnt"+(full?" full":"")}
+ var cs=document.getElementById("cupos");if(cs)cs.value=S.cupos;
+ document.getElementById("lst").innerHTML=S.orden.length?S.orden.map(function(i){return"<li>"+esc(S.names[i])+"</li>"}).join(""):"<li style='font-weight:400;color:#5a6585;list-style:none;margin-left:-22px'>Aún no hay equipos seleccionados.</li>";
+ if(!host){
+  var b=document.getElementById("hand"),r=document.getElementById("res"),p=S.orden.indexOf(mine);
+  if(mine===null){b.disabled=true;r.className="res wait";r.textContent="Primero elige tu equipo."}
+  else if(p>=0){b.disabled=true;r.className="res ok";r.textContent="¡"+S.names[mine]+" quedó en el puesto "+(p+1)+"!";try{navigator.vibrate(200)}catch(e){}}
+  else if(full){b.disabled=true;r.className="res no";r.textContent="Cupos llenos. Otros equipos llegaron antes."}
+  else{b.disabled=!connected;r.className="res wait";r.textContent="Equipo elegido: "+S.names[mine]+". ¡Toca el botón cuando estén listos!"}
+ }
+}
+build();render();connect();
+})();
+</script>
+</body>
+</html>
