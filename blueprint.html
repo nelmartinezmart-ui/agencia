@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blueprint de agenc[ia]</title>
+<style>body{margin:0;padding:12px;background:#fff}</style>
+</head>
+<body>
+<!-- Blueprint de agenc[ia] -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<style>
+#agb{--bg:#f6f7fb;--card:#fff;--ink:#0d1f4c;--mute:#5a6585;--line:#d9ddea;--acc:#e9a23b;--soft:#fdf3e1;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;border-radius:12px;box-sizing:border-box}
+#agb *{box-sizing:border-box}
+#agb .wrap{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
+#agb h1{margin:0;font-size:1.6rem}
+#agb h1 b{color:var(--acc)}
+#agb .sub{color:var(--mute);margin:4px 0 14px;font-size:.9rem}
+#agb .reto{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--acc);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-weight:600;font-size:.9rem}
+#agb .sec{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+#agb .sec h2{margin:0 0 10px;font-size:1rem;color:var(--acc);text-transform:uppercase;letter-spacing:.6px}
+#agb .g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#agb .full{grid-column:1/-1}
+#agb label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--mute);margin-bottom:3px}
+#agb input,#agb textarea,#agb select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:8px 10px;font:inherit;font-size:.9rem}
+#agb textarea{resize:vertical;min-height:62px}
+#agb .scroll{overflow-x:auto}
+#agb table.bp{border-collapse:separate;border-spacing:4px;min-width:980px;width:100%}
+#agb .bp th{font-size:.7rem;text-transform:uppercase;letter-spacing:.3px;text-align:left;vertical-align:top;width:150px;padding:6px;color:var(--ink)}
+#agb .bp th small{display:block;text-transform:none;font-weight:400;color:var(--mute);letter-spacing:0;margin-top:2px}
+#agb .bp td{vertical-align:top;padding:0}
+#agb .bp td textarea{min-height:84px;font-size:.82rem}
+#agb .bp thead input{font-weight:700;text-align:center;background:var(--ink);color:var(--bg);border:0}
+#agb .bp .ln td{height:auto;font-size:.65rem;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.8px;border-top:2px dashed var(--acc);padding:3px 0 0}
+#agb .btn{border:0;border-radius:10px;padding:13px 20px;font:inherit;font-weight:700;cursor:pointer;background:var(--acc);color:#0d1f4c}
+#agb #msg{margin-left:10px;font-size:.85rem;color:var(--mute)}
+@media (max-width:620px){#agb .g{grid-template-columns:1fr}}
+</style>
+<div id="agb"><div class="wrap">
+<h1>AGENC<b>[</b>IA<b>]</b> · Blueprint de la idea ganadora</h1>
+<p class="sub">Mapeo de agencia: completen cada sección y descarguen el PDF para imprimir.</p>
+<div class="reto" id="reto">¿Cómo diseñar experiencias de aprendizaje, desde la agenc[ia] en tanto artesanía digital, que contrarresten las ilusiones cognitivas de la IA y protejan la agencia de la comunidad universitaria?</div>
+<div class="sec"><h2>1. Identificación de la idea</h2><div class="g">
+<div><label>Nombre de marketing</label><input id="nombre" placeholder="Corto y memorable"></div>
+<div><label>Equipo</label><input id="equipo" placeholder="Nombre del equipo e integrantes"></div>
+<div class="full"><label>Descripción corta</label><textarea id="desc" placeholder="¿Qué hace el agente y para quién?"></textarea></div>
+<div><label>Nivel de agencia proyectada</label><select id="nivel"></select></div>
+<div><label>Ventaja cognitiva que activa</label><select id="vent"></select></div>
+<div><label>Rol de aplicación</label><select id="rol"><option>Usuario docente (rol reactivo)</option><option>Desarrollador docente (construcción y gobernanza)</option></select></div>
+<div><label>Pauta de diseño (si es desarrollador)</label><select id="pauta"><option>No aplica</option><option>Anticipatoria</option><option>Preventiva y evolutiva</option></select></div>
+<div><label>Ilusión cognitiva que contrarresta</label><textarea id="ilus"></textarea></div>
+<div><label>Cómo protege la agencia humana</label><textarea id="prot"></textarea></div>
+</div></div>
+<div class="sec"><h2>2. Mapa de agenc[ia] (Floridi y Sanders)</h2><div class="g">
+<div><label>Interactividad: ¿cómo responde al entorno y a las personas?</label><textarea id="a_int"></textarea></div>
+<div><label>Autonomía: ¿qué hace sin supervisión continua?</label><textarea id="a_aut"></textarea></div>
+<div><label>Adaptabilidad: ¿cómo cambia sus reglas o estrategias?</label><textarea id="a_ada"></textarea></div>
+<div><label>Gobernanza: ¿quién audita, con qué frecuencia y con qué límites?</label><textarea id="gob"></textarea></div>
+</div></div>
+<div class="sec"><h2>3. Blueprint de la experiencia</h2>
+<p class="sub" style="margin-top:0">Pueden renombrar las etapas. La línea de visibilidad separa lo que ve la persona de lo que ocurre dentro del agente; la línea de agencia humana marca dónde decide y controla la persona.</p>
+<div class="scroll"><table class="bp" id="bp"></table></div></div>
+<div class="sec"><h2>4. Cierre</h2><div class="g">
+<div><label>Indicadores de éxito</label><textarea id="ind"></textarea></div>
+<div><label>Próximos pasos (esta semana)</label><textarea id="pas"></textarea></div>
+</div></div>
+<button class="btn" id="pdf">⬇ Descargar blueprint en PDF</button><span id="msg"></span>
+</div></div>
+<script>
+(function(){
+var LV=["Interactividad básica","Interactividad contextual","Interactividad interpretativa","Autonomía puntual","Autonomía coordinada","Autonomía de procesos","Adaptabilidad puntual","Adaptabilidad dinámica","Adaptabilidad ecosistémica"];
+var VT=["Circularidad (Dupla I · Sentidos)","Reencuadre (Dupla I · Entorno)","Metamorfosis (Dupla II · Forma)","Humanidad (Dupla II · Fondo)","Duda (Dupla III · Proceso)","Tempo (Dupla III · Maduración)"];
+var ST=["Preparación","Activación","Interacción","Decisión","Cierre y aprendizaje"];
+var RW=[["Acciones del docente o usuario","Qué hace la persona",[236,240,250]],
+["Acciones visibles del agente","Qué hace y muestra el agente",[255,247,232]],
+["LÍNEA DE VISIBILIDAD"],
+["Procesos internos del agente","Datos, herramientas, modelos y reglas",[243,244,247]],
+["LÍNEA DE AGENCIA HUMANA"],
+["Decisión y control humano","Qué decide siempre la persona; dónde audita",[253,236,208]],
+["Ilusión cognitiva o riesgo","Qué puede fallar o confundir",[250,235,235]]];
+function $(i){return document.getElementById(i)}
+$("nivel").innerHTML='<option value="">Selecciona...</option>'+LV.map(function(l,i){return '<option value="'+(i+1)+'">'+(i+1)+' · '+l+'</option>'}).join("");
+$("vent").innerHTML='<option value="">Selecciona...</option>'+VT.map(function(v){return '<option>'+v+'</option>'}).join("");
+var h='<thead><tr><th></th>';
+ST.forEach(function(s,i){h+='<td><input id="h'+i+'" value="'+s+'"></td>'});
+h+='</tr></thead><tbody>';
+RW.forEach(function(r,ri){
+ if(r.length===1){h+='<tr class="ln"><td colspan="'+(ST.length+1)+'">'+r[0]+'</td></tr>';return}
+ h+='<tr><th>'+r[0]+'<small>'+r[1]+'</small></th>';
+ ST.forEach(function(s,i){h+='<td><textarea id="c'+ri+'_'+i+'"></textarea></td>'});
+ h+='</tr>';
+});
+$("bp").innerHTML=h+'</tbody>';
+function v(i){return ($(i).value||"").trim()||"-"}
+function build(){
+ var J=window.jspdf.jsPDF;var d=new J({orientation:"landscape",unit:"mm",format:"a4"});
+ var NAVY=[13,31,76],ORG=[233,162,59],M=14;
+ function head(t){
+  d.setFont("helvetica","bold");d.setFontSize(16);d.setTextColor(13,31,76);d.text("AGENC",M,16);
+  var w=d.getTextWidth("AGENC");d.setTextColor(233,162,59);d.text("[",M+w,16);var w2=d.getTextWidth("[");
+  d.setTextColor(13,31,76);d.text("IA",M+w+w2,16);var w3=d.getTextWidth("IA");d.setTextColor(233,162,59);d.text("]",M+w+w2+w3,16);
+  d.setTextColor(13,31,76);d.setFontSize(11);d.text(t,M+38,16);
+  d.setFont("helvetica","normal");d.setFontSize(8);d.setTextColor(110,118,140);d.text(new Date().toLocaleDateString("es-CO"),297-M,16,{align:"right"});
+ }
+ head("Blueprint de la idea ganadora: "+v("nombre"));
+ var nv=$("nivel").value?$("nivel").options[$("nivel").selectedIndex].text:"-";
+ var rt=d.splitTextToSize($("reto").textContent,297-2*M-8);
+ d.setFillColor(250,243,229);d.rect(M,21,297-2*M,rt.length*4+5,"F");d.setFillColor(233,162,59);d.rect(M,21,1.8,rt.length*4+5,"F");
+ d.setFontSize(8.5);d.setFont("helvetica","bold");d.setTextColor(13,31,76);d.text(rt,M+5,26);
+ var y=21+rt.length*4+9;
+ var base={theme:"grid",styles:{fontSize:8.5,cellPadding:2,textColor:NAVY,lineColor:[205,210,225],valign:"top"},headStyles:{fillColor:NAVY,textColor:255},margin:{left:M,right:M},columnStyles:{0:{cellWidth:62,fontStyle:"bold",fillColor:[250,243,229]}}};
+ d.autoTable(Object.assign({},base,{startY:y,head:[[{content:"Identificación de la idea",colSpan:2}]],body:[
+  ["Nombre de marketing",v("nombre")],["Equipo",v("equipo")],["Descripción",v("desc")],["Nivel de agencia",nv],
+  ["Ventaja cognitiva",v("vent")],["Rol y pauta de diseño",v("rol")+" · Pauta: "+v("pauta")],
+  ["Ilusión cognitiva que contrarresta",v("ilus")],["Cómo protege la agencia humana",v("prot")]]}));
+ d.autoTable(Object.assign({},base,{startY:d.lastAutoTable.finalY+5,head:[[{content:"Mapa de agenc[ia]",colSpan:2}]],body:[
+  ["Interactividad",v("a_int")],["Autonomía",v("a_aut")],["Adaptabilidad",v("a_ada")],["Gobernanza",v("gob")]]}));
+ d.addPage();head("Blueprint de la experiencia: "+v("nombre"));
+ var cs={0:{cellWidth:36,fontStyle:"bold"}};
+ var hd=[[""].concat(ST.map(function(s,i){return v("h"+i)}))];
+ var body=[];
+ RW.forEach(function(r,ri){
+  if(r.length===1){body.push([{content:r[0],colSpan:ST.length+1,styles:{fillColor:ORG,textColor:NAVY,fontStyle:"bold",fontSize:7,cellPadding:1,halign:"center"}}]);return}
+  var row=[{content:r[0],styles:{fillColor:r[2],fontStyle:"bold"}}];
+  ST.forEach(function(s,i){var t=($("c"+ri+"_"+i).value||"").trim();row.push({content:t,styles:{fillColor:r[2],minCellHeight:20}})});
+  body.push(row);
+ });
+ d.autoTable({startY:22,theme:"grid",head:hd,body:body,margin:{left:M,right:M},columnStyles:cs,
+  styles:{fontSize:8,cellPadding:2,textColor:NAVY,lineColor:[205,210,225],valign:"top"},
+  headStyles:{fillColor:NAVY,textColor:255,halign:"center"}});
+ d.autoTable(Object.assign({},base,{startY:d.lastAutoTable.finalY+5,head:[[{content:"Cierre",colSpan:2}]],body:[["Indicadores de éxito",v("ind")],["Próximos pasos",v("pas")]]}));
+ return d;
+}
+$("pdf").onclick=async function(){
+ var m=$("msg");m.textContent="";
+ try{
+  if(!window.jspdf||!window.jspdf.jsPDF.API.autoTable){m.textContent="No se pudo cargar el generador de PDF. Revisa tu conexión.";return}
+  var d=build();
+  var n="blueprint-agencia-"+($("nombre").value||"idea").trim().replace(/[^\wÁÉÍÓÚáéíóúñÑ-]+/g,"-")+".pdf";
+  var dl=null;
+  if(typeof claude!=="undefined"&&claude.use){dl=await claude.use("downloads")}
+  if(dl){await dl.save({filename:n,data:d.output("blob")})}else{d.save(n)}
+  m.textContent="PDF listo.";
+ }catch(e){
+  if(e&&e.code==="declined")return;
+  m.textContent="No se pudo generar el PDF"+(e&&e.message?": "+e.message:".");
+ }
+};
+})();
+</script>
+</body>
+</html>

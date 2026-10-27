@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matriz de valoración de ideas · agenc[ia]</title>
+<style>body{margin:0;padding:12px;background:#fff}</style>
+</head>
+<body>
+<!-- Matriz de valoración de ideas · agenc[ia] -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+#agm{--bg:#f6f7fb;--card:#fff;--ink:#0d1f4c;--mute:#5a6585;--line:#d9ddea;--acc:#e9a23b;--accink:#0d1f4c;--sel:#0d1f4c;--selink:#fff;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;border-radius:12px;box-sizing:border-box}
+#agm *{box-sizing:border-box}
+#agm .wrap{max-width:980px;margin:0 auto;padding:20px 16px 60px}
+#agm h1{margin:0;font-size:1.6rem;letter-spacing:.5px}
+#agm h1 b{color:var(--acc)}
+#agm .sub{color:var(--mute);margin:4px 0 14px;font-size:.9rem}
+#agm .reto{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--acc);border-radius:12px;padding:14px 16px;margin:0 0 16px}
+#agm .reto small{display:block;font-size:.7rem;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--acc);margin-bottom:4px}
+#agm .reto p{margin:0;font-weight:600}
+#agm .meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+#agm label.f{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mute);margin-bottom:4px}
+#agm input[type=text],#agm textarea{width:100%;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:9px 11px;font:inherit}
+#agm textarea{resize:vertical;min-height:58px}
+#agm .idea{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--acc);border-radius:12px;padding:16px;margin-bottom:18px;break-inside:avoid}
+#agm .top{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+#agm .num{background:var(--sel);color:var(--selink);font-weight:800;border-radius:50%;width:32px;height:32px;display:grid;place-items:center;flex:none}
+#agm .top input{font-weight:700;font-size:1.05rem}
+#agm .crit{margin-top:14px}
+#agm .crit h3{margin:0 0 6px;font-size:.9rem}
+#agm .crit h3 small{font-weight:400;color:var(--mute)}
+#agm .row{display:flex;flex-wrap:wrap;gap:6px}
+#agm .row button,#agm .ag button{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;font:inherit;font-weight:700;cursor:pointer}
+#agm .row button{min-width:40px;height:40px}
+#agm .on{background:var(--sel)!important;color:var(--selink)!important;border-color:var(--sel)!important}
+#agm .scroll{overflow-x:auto;padding-bottom:4px}
+#agm .agw{min-width:830px}
+#agm .dims,#agm .ag{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
+#agm .dims div{grid-column:span 3;text-align:center;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--acc);border-bottom:2px solid var(--acc);padding-bottom:2px;margin-bottom:5px}
+#agm .ag button{padding:7px 2px;display:flex;flex-direction:column;align-items:center;line-height:1.2;font-size:1rem}
+#agm .ag button span{font-size:.68rem;font-weight:600;margin-top:3px;line-height:1.15}
+#agm .tot{margin-top:14px;padding-top:10px;border-top:1px dashed var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-weight:700}
+#agm .tot em{font-style:normal;color:var(--acc);font-size:1.2rem}
+#agm .acts{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px}
+#agm .btn{border:0;border-radius:10px;padding:12px 18px;font:inherit;font-weight:700;cursor:pointer}
+#agm .btn.p{background:var(--acc);color:var(--accink)}
+#agm .btn.s{background:transparent;border:1px solid var(--line);color:var(--ink)}
+#agm .del{background:none;border:0;color:var(--mute);cursor:pointer;font-size:1.3rem}
+#agm #msg{font-size:.85rem;color:var(--mute)}
+#agm .sum{width:100%;border-collapse:collapse;margin-top:22px;font-size:.85rem}
+#agm .sum th,#agm .sum td{border:1px solid var(--line);padding:6px 8px;text-align:center}
+#agm .sum td:nth-child(2){text-align:left}
+#agm details{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:.85rem}
+#agm summary{cursor:pointer;font-weight:700}
+#agm details li{margin:4px 0}
+@media (max-width:560px){#agm .meta{grid-template-columns:1fr}}
+</style>
+<div id="agm"><div class="wrap">
+ <h1>AGENC<b>[</b>IA<b>]</b> · Matriz de valoración de ideas</h1>
+ <p class="sub">Maestros artesanos digitales</p>
+ <div class="reto"><small>El reto del encuentro</small><p id="reto">¿Cómo diseñar experiencias de aprendizaje, desde la agenc[ia] en tanto artesanía digital, que contrarresten las ilusiones cognitivas de la IA y protejan la agencia de la comunidad universitaria?</p></div>
+ <p class="sub">Valoren cada idea de 0 a 9 (9 = lo más positivo). En nivel de agencia elijan de 1 a 9.</p>
+ <div class="meta">
+  <div><label class="f">Grupo / equipo</label><input type="text" id="grupo" placeholder="Nombre del grupo"></div>
+  <div><label class="f">Integrantes</label><input type="text" id="integ" placeholder="Nombres"></div>
+ </div>
+ <div id="ideas"></div>
+ <div class="acts">
+  <button class="btn s" id="add">+ Agregar idea</button>
+  <button class="btn p" id="pdf">⬇ Descargar valoración en PDF</button>
+  <span id="msg"></span>
+ </div>
+ <table class="sum" id="sum"></table>
+ <details><summary>Ver la escala de agenc[ia] (9 niveles)</summary>
+  <ol id="esc"></ol>
+ </details>
+</div></div>
+<script>
+(function(){
+var LV=[
+["Básica","Interactividad","Interactividad básica","Responde a un estímulo simple y aislado; supervisión humana total."],
+["Contextual","Interactividad","Interactividad contextual","Responde a varios estímulos con contexto limitado; supervisión muy alta."],
+["Interpretativa","Interactividad","Interactividad interpretativa","Integra información del entorno y propone alternativas dentro de reglas; supervisión alta."],
+["Puntual","Autonomía","Autonomía puntual","Ejecuta tareas completas previamente definidas; vigilancia alta."],
+["Coordinada","Autonomía","Autonomía coordinada","Entrelaza varias funciones o herramientas para un objetivo; supervisión media."],
+["Procesos","Autonomía","Autonomía de procesos","Ejecuta flujos completos coordinando servicios externos; mínima intervención, supervisión media."],
+["Puntual","Adaptabilidad","Adaptabilidad puntual","Ajusta estrategias con datos históricos o retroalimentación; auditoría humana activa."],
+["Dinámica","Adaptabilidad","Adaptabilidad dinámica","Reconfigura su comportamiento en tiempo real dentro de límites; guardrails y auditoría constante."],
+["Ecosistémica","Adaptabilidad","Adaptabilidad ecosistémica","Coordina múltiples agentes, herramientas y fuentes bajo gobernanza humana permanente."]];
+var CR=[["nov","Novedad","¿Qué tan nueva es la idea?"],["uti","Utilidad","¿Qué tan útil es para quien la use?"],["fac","Factibilidad","¿Qué tan viable es construirla?"]];
+var ideas=[],box=document.getElementById("ideas");
+document.getElementById("esc").innerHTML=LV.map(function(l){return "<li><b>"+l[2]+".</b> "+l[3]+"</li>"}).join("");
+function avg(i){var v=[i.nov,i.uti,i.fac,i.age].filter(function(x){return x!==null});return v.length?(v.reduce(function(a,b){return a+b},0)/v.length):null}
+function fmt(x){return x===null?"-":(Math.round(x*10)/10).toString().replace(".",",")}
+function esc(s){return s.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function mk(i){
+ var d=document.createElement("div");d.className="idea";
+ var h='<div class="top"><div class="num"></div><input type="text" class="nm" placeholder="Nombre de marketing (corto y conciso)"><button class="del" title="Quitar idea">✕</button></div>'+
+ '<label class="f">Descripción corta</label><textarea class="ds" placeholder="¿De qué trata la idea en una o dos frases?"></textarea>';
+ CR.forEach(function(c){
+  h+='<div class="crit"><h3>'+c[1]+' <small>· '+c[2]+' (0–9)</small></h3><div class="row" data-k="'+c[0]+'">';
+  for(var n=0;n<=9;n++)h+='<button data-v="'+n+'">'+n+'</button>';
+  h+='</div></div>';
+ });
+ h+='<div class="crit"><h3>Nivel de agencia proyectada <small>· (1–9)</small></h3><div class="scroll"><div class="agw"><div class="dims"><div>Interactividad</div><div>Autonomía</div><div>Adaptabilidad</div></div><div class="ag" data-k="age">';
+ LV.forEach(function(l,n){h+='<button data-v="'+(n+1)+'">'+(n+1)+'<span>'+l[2]+'</span></button>'});
+ h+='</div></div></div></div><div class="tot"><span>Puntaje promedio</span><em class="av">-</em></div>';
+ d.innerHTML=h;
+ d.querySelector(".nm").oninput=function(e){i.name=e.target.value;sum()};
+ d.querySelector(".ds").oninput=function(e){i.desc=e.target.value};
+ d.querySelector(".del").onclick=function(){ideas.splice(ideas.indexOf(i),1);render()};
+ d.querySelectorAll("[data-k]").forEach(function(r){r.onclick=function(e){
+  var b=e.target.closest("button");if(!b)return;
+  var k=r.dataset.k,v=+b.dataset.v;i[k]=(i[k]===v)?null:v;paint(d,i);sum();
+ }});
+ i.el=d;return d;
+}
+function paint(d,i){
+ d.querySelectorAll("[data-k]").forEach(function(r){
+  r.querySelectorAll("button").forEach(function(b){b.classList.toggle("on",i[r.dataset.k]===+b.dataset.v)});
+ });
+ d.querySelector(".av").textContent=fmt(avg(i));
+}
+function agTxt(i){return i.age?i.age+" · "+LV[i.age-1][2]:"-"}
+function sum(){
+ var t='<tr><th>#</th><th>Idea</th><th>Nov.</th><th>Util.</th><th>Fact.</th><th>Agencia</th><th>Prom.</th></tr>';
+ ideas.forEach(function(i,n){
+  t+='<tr><td>'+(n+1)+'</td><td>'+esc(i.name||"Sin nombre")+'</td><td>'+fmt(i.nov)+'</td><td>'+fmt(i.uti)+'</td><td>'+fmt(i.fac)+'</td><td>'+esc(agTxt(i))+'</td><td><b>'+fmt(avg(i))+'</b></td></tr>';
+ });
+ document.getElementById("sum").innerHTML=t;
+}
+function render(){
+ box.innerHTML="";
+ ideas.forEach(function(i,n){var d=i.el||mk(i);d.querySelector(".num").textContent=n+1;box.appendChild(d);paint(d,i)});
+ sum();
+}
+function add(){ideas.push({name:"",desc:"",nov:null,uti:null,fac:null,age:null});render()}
+document.getElementById("add").onclick=add;
+add();add();add();
+/* ---------- PDF ---------- */
+var NAVY=[13,31,76],ORG=[233,162,59],GRY=[110,118,140],LINE=[205,210,225];
+function buildPDF(){
+ var doc=new window.jspdf.jsPDF({unit:"mm",format:"a4"});
+ var W=210,M=14,CW=W-2*M,y=M;
+ function ensure(h){if(y+h>285){doc.addPage();y=M}}
+ function col(c){doc.setTextColor(c[0],c[1],c[2])}
+ function fill(c){doc.setFillColor(c[0],c[1],c[2])}
+ function draw(c){doc.setDrawColor(c[0],c[1],c[2])}
+ doc.setFont("helvetica","bold");doc.setFontSize(20);col(NAVY);doc.text("AGENC",M,y+6);
+ var w1=doc.getTextWidth("AGENC");col(ORG);doc.text("[",M+w1,y+6);var w2=doc.getTextWidth("[");
+ col(NAVY);doc.text("IA",M+w1+w2,y+6);var w3=doc.getTextWidth("IA");col(ORG);doc.text("]",M+w1+w2+w3,y+6);
+ doc.setFontSize(10);col(NAVY);doc.text("Matriz de valoración de ideas",M+68,y+6);
+ doc.setFont("helvetica","normal");doc.setFontSize(8);col(GRY);
+ doc.text(new Date().toLocaleDateString("es-CO"),W-M,y+6,{align:"right"});
+ y+=11;
+ var reto=doc.splitTextToSize(document.getElementById("reto").textContent,CW-10);
+ var rh=reto.length*4.4+10;
+ fill([250,243,229]);doc.rect(M,y,CW,rh,"F");fill(ORG);doc.rect(M,y,2,rh,"F");
+ doc.setFont("helvetica","bold");doc.setFontSize(7);col(ORG);doc.text("EL RETO DEL ENCUENTRO",M+6,y+4.5);
+ doc.setFontSize(9);col(NAVY);doc.text(reto,M+6,y+9);
+ y+=rh+5;
+ doc.setFontSize(9);doc.setFont("helvetica","bold");col(NAVY);
+ doc.text("Grupo: ",M,y);doc.setFont("helvetica","normal");doc.text(doc.splitTextToSize(document.getElementById("grupo").value||"-",CW-14),M+12,y);y+=5;
+ doc.setFont("helvetica","bold");doc.text("Integrantes: ",M,y);doc.setFont("helvetica","normal");
+ var ig=doc.splitTextToSize(document.getElementById("integ").value||"-",CW-24);doc.text(ig,M+21,y);y+=ig.length*4.2+4;
+ ideas.forEach(function(i,n){
+  var desc=doc.splitTextToSize(i.desc||"(sin descripción)",CW-10);
+  var bh=12+desc.length*4+3*11+27;
+  ensure(bh+4);
+  draw(LINE);doc.setLineWidth(.3);doc.roundedRect(M,y,CW,bh,2,2,"S");
+  fill(ORG);doc.rect(M,y,1.8,bh,"F");
+  var x0=M+6,yy=y+7;
+  fill(NAVY);doc.circle(x0+3,yy-1.5,3.2,"F");
+  doc.setFont("helvetica","bold");doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text(String(n+1),x0+3,yy-0.3,{align:"center"});
+  col(NAVY);doc.setFontSize(12);doc.text(doc.splitTextToSize(i.name||"Sin nombre",CW-40)[0],x0+9,yy);
+  var a=avg(i);doc.setFontSize(9);col(ORG);doc.text("Promedio: "+fmt(a),M+CW-4,yy,{align:"right"});
+  yy+=5;doc.setFont("helvetica","normal");doc.setFontSize(9);col(NAVY);doc.text(desc,x0,yy);yy+=desc.length*4+3;
+  CR.forEach(function(c){
+   doc.setFont("helvetica","bold");doc.setFontSize(8);col(NAVY);doc.text(c[1],x0,yy+4.5);
+   for(var k=0;k<=9;k++){
+    var bx=x0+30+k*8.4,on=i[c[0]]===k;
+    if(on){fill(NAVY);doc.roundedRect(bx,yy,7.4,7,1,1,"F");doc.setTextColor(255,255,255)}
+    else{draw(LINE);doc.roundedRect(bx,yy,7.4,7,1,1,"S");col(GRY)}
+    doc.setFont("helvetica","bold");doc.setFontSize(8);doc.text(String(k),bx+3.7,yy+4.7,{align:"center"});
+   }
+   yy+=11;
+  });
+  doc.setFont("helvetica","bold");doc.setFontSize(8);col(NAVY);doc.text("Nivel de agencia",x0,yy+3);
+  var dims=[["Interactividad",0],["Autonomía",3],["Adaptabilidad",6]];
+  var bw=15.2;
+  dims.forEach(function(dm){
+   var sx=x0+30+dm[1]*(bw+.8);
+   doc.setFontSize(6.5);col(ORG);doc.text(dm[0].toUpperCase(),sx+(3*bw+1.6)/2,yy+1.5,{align:"center"});
+  });
+  yy+=3;
+  LV.forEach(function(l,k){
+   var bx=x0+30+k*(bw+.8),on=i.age===k+1;
+   if(on){fill(NAVY);doc.roundedRect(bx,yy,bw,13,1,1,"F");doc.setTextColor(255,255,255)}
+   else{draw(LINE);doc.roundedRect(bx,yy,bw,13,1,1,"S");col(GRY)}
+   doc.setFont("helvetica","bold");doc.setFontSize(8);doc.text(String(k+1),bx+bw/2,yy+4,{align:"center"});
+   var pw=l[2].split(" "),l1=pw.shift(),l2=pw.join(" ");
+   doc.setFont("helvetica","normal");doc.setFontSize(5);doc.text(l1,bx+bw/2,yy+7.4,{align:"center"});doc.text(l2,bx+bw/2,yy+10.2,{align:"center"});
+  });
+  yy+=17;doc.setFont("helvetica","italic");doc.setFontSize(8);col(GRY);
+  doc.text("Seleccionado: "+agTxt(i),x0+30,yy);
+  y+=bh+5;
+ });
+ ensure(14+ideas.length*7);
+ doc.setFont("helvetica","bold");doc.setFontSize(10);col(NAVY);doc.text("Resumen",M,y+3);y+=6;
+ var cx=[M,M+8,M+62,M+78,M+94,M+110,M+170];
+ fill(NAVY);doc.rect(M,y,CW,6,"F");doc.setTextColor(255,255,255);doc.setFontSize(8);
+ ["#","Idea","Nov.","Util.","Fact.","Agencia","Prom."].forEach(function(t,k){doc.text(t,cx[k]+1.5,y+4.2)});
+ y+=6;
+ ideas.forEach(function(i,n){
+  draw(LINE);doc.rect(M,y,CW,6,"S");doc.setFont("helvetica","normal");col(NAVY);doc.setFontSize(8);
+  var nm=doc.splitTextToSize(i.name||"Sin nombre",52)[0];
+  var ag=i.age?(i.age+" · "+LV[i.age-1][2]):"-";
+  [String(n+1),nm,fmt(i.nov),fmt(i.uti),fmt(i.fac),ag,fmt(avg(i))].forEach(function(t,k){doc.text(t,cx[k]+1.5,y+4.2)});
+  y+=6;
+ });
+ return doc;
+}
+var msg=document.getElementById("msg");
+document.getElementById("pdf").onclick=async function(){
+ msg.textContent="";
+ try{
+  if(!window.jspdf){msg.textContent="No se pudo cargar el generador de PDF. Revisa tu conexión.";return}
+  var pdfDoc=buildPDF();
+  var g=(document.getElementById("grupo").value||"grupo").trim().replace(/[^\wÁÉÍÓÚáéíóúñÑ-]+/g,"-");
+  pdfDoc.save("valoracion-ideas-agencia-"+g+".pdf");
+  msg.textContent="PDF listo.";
+ }catch(e){
+    msg.textContent="No se pudo generar el PDF"+(e&&e.message?": "+e.message:".");
+ }
+};
+})();
+</script>
+</body>
+</html>
